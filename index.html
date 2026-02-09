@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANONIM CHAT // HACKER_MODE</title>
+    <style>
+        /* CSS STYLES */
+        :root {
+            --primary-color: #0f0;
+            --bg-color: #000;
+            --dim-color: #004400;
+            --error-color: #ff0033;
+            --font-stack: 'Courier New', Courier, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-family: var(--font-stack);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        /* Background Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .blink { animation: blinker 1s linear infinite; }
+        .text-center { text-align: center; }
+        .full-screen-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 400px;
+            z-index: 10;
+        }
+
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        /* Form Styles */
+        .login-box, .welcome-box {
+            border: 2px solid var(--primary-color);
+            padding: 20px;
+            background: rgba(0, 20, 0, 0.9);
+            box-shadow: 0 0 15px var(--primary-color);
+            position: relative;
+        }
+
+        .login-box::after {
+            content: "";
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            box-shadow: 0 0 10px var(--primary-color);
+            z-index: -1;
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 1px dashed var(--primary-color);
+            padding-bottom: 10px;
+            text-shadow: 0 0 5px var(--primary-color);
+        }
+
+        .input-group { margin-bottom: 15px; text-align: left; }
+        
+        label { display: block; margin-bottom: 5px; font-size: 12px; opacity: 0.8; }
+
+        input {
+            width: 100%;
+            background: #001100;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 10px;
+            font-family: var(--font-stack);
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            box-shadow: 0 0 10px var(--primary-color);
+            background: #002200;
+        }
+
+        button {
+            width: 100%;
+            background: var(--primary-color);
+            color: black;
+            border: none;
+            padding: 12px;
+            font-family: var(--font-stack);
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #fff;
+            box-shadow: 0 0 15px #fff;
+        }
+
+        button:active { transform: scale(0.98); }
+
+        /* Chat Interface */
+        #chat-app {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            z-index: 5;
+            padding: 10px;
+        }
+
+        header {
+            border-bottom: 2px solid var(--primary-color);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        #messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--bg-color);
+        }
+
+        /* Custom Scrollbar for Webkit */
+        #messages-container::-webkit-scrollbar { width: 8px; }
+        #messages-container::-webkit-scrollbar-track { background: #000; }
+        #messages-container::-webkit-scrollbar-thumb { background: var(--primary-color); }
+
+        .message {
+            max-width: 85%;
+            padding: 10px 15px;
+            border: 1px solid var(--dim-color);
+            background: rgba(0, 20, 0, 0.6);
+            position: relative;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .message.mine {
+            align-self: flex-end;
+            border-color: var(--primary-color);
+            background: rgba(0, 50, 0, 0.8);
+            box-shadow: 0 0 5px var(--dim-color);
+        }
+
+        .message.mine::before {
+            content: "YOU";
+            position: absolute;
+            top: -10px;
+            right: 0;
+            font-size: 10px;
+            background: #000;
+            padding: 0 5px;
+            color: var(--primary-color);
+        }
+
+        .message.others::before {
+            content: attr(data-sender);
+            position: absolute;
+            top: -10px;
+            left: 0;
+            font-size: 10px;
+            background: #000;
+            padding: 0 5px;
+            color: #00ffaa;
+        }
+
+        .message-content { margin-top: 5px; font-size: 15px; line-height: 1.4; }
+        .timestamp { font-size: 10px; opacity: 0.5; margin-top: 5px; text-align: right; }
+
+        .system-msg {
+            align-self: center;
+            border: none;
+            background: transparent;
+            color: #888;
+            font-style: italic;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* Input Area */
+        .chat-input-area {
+            border-top: 2px solid var(--primary-color);
+            padding: 10px;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            border: 1px solid var(--dim-color);
+        }
+
+        .send-btn {
+            width: auto;
+            padding: 0 20px;
+        }
+
+        /* Error/Status Toast */
+        #toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--error-color);
+            color: #fff;
+            padding: 10px 20px;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 0 10px var(--error-color);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .message { max-width: 95%; }
+            .full-screen-center { width: 95%; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ERROR TOAST -->
+    <div id="toast"></div>
+
+    <!-- 1. LOGIN SCREEN (Register) -->
+    <div id="login-screen" class="full-screen-center">
+        <div class="login-box">
+            <h2 class="text-center">>> RO'YXATDAN O'TISH</h2>
+            <div class="input-group">
+                <label for="reg-fullname">TO'LIQ ISM FAMILYA:</label>
+                <input type="text" id="reg-fullname" placeholder="Ismingizni kiriting..." autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label for="reg-alias">TAHALLUS (NICKNAME):</label>
+                <input type="text" id="reg-alias" placeholder="Chatdagi ismingiz..." autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label for="reg-pass">MAXFIY PAROL:</label>
+                <input type="password" id="reg-pass" placeholder="Xavfsiz parol o'ylang...">
+            </div>
+            <button onclick="handleRegister()">KIRISH</button>
+            <p style="margin-top:10px; font-size:10px; opacity:0.6;">* Ma'lumotlar faqat shu qurilmada saqlanadi.</p>
+        </div>
+    </div>
+
+    <!-- 2. PASSWORD SCREEN (For returning users) -->
+    <div id="password-screen" class="full-screen-center hidden">
+        <div class="login-box">
+            <h2 class="text-center">>> XAVFSIZLIK TEKSHIRUVI</h2>
+            <p id="welcome-msg" style="margin-bottom: 15px; font-style: italic;"></p>
+            <div class="input-group">
+                <label for="login-pass">PAROLINGIZNI KIRITING:</label>
+                <input type="password" id="login-pass" placeholder="******">
+            </div>
+            <button onclick="handleLogin()">SISTEMAGA KIRISH</button>
+        </div>
+    </div>
+
+    <!-- 3. CHAT INTERFACE -->
+    <div id="chat-app" class="hidden">
+        <header>
+            <div>
+                <span class="status-indicator blink"></span>
+                <span style="font-weight:bold; font-size:16px;">ANONIM_CHAT_V1.0</span>
+            </div>
+            <div style="font-size: 12px;">
+                USER: <span id="display-alias" style="color:#fff; text-shadow:0 0 5px #fff;">UNKNOWN</span>
+                <a href="#" onclick="logout()" style="color: var(--error-color); margin-left: 10px; text-decoration: none;">[EXIT]</a>
+            </div>
+        </header>
+
+        <div id="messages-container">
+            <!-- Messages will appear here -->
+            <div class="message system-msg">Tarmoqqa ulanish muvaffaqiyatli amalga oshdi...</div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="msg-input" placeholder="Xabar yozish..." autocomplete="off">
+            <button class="send-btn" onclick="sendMessage()">YUBORISH</button>
+        </div>
+    </div>
+
+    <script>
+        /* JAVASCRIPT LOGIC */
+
+        // --- State Management ---
+        const DB_KEY = 'hacker_chat_db';
+        let currentUser = null;
+        let chatHistory = [];
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            checkAuth();
+            
+            // Enter key listeners
+            document.getElementById('reg-pass').addEventListener('keypress', (e) => { if(e.key === 'Enter') handleRegister(); });
+            document.getElementById('login-pass').addEventListener('keypress', (e) => { if(e.key === 'Enter') handleLogin(); });
+            document.getElementById('msg-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
+        });
+
+        // --- Data Handling (Local Storage) ---
+        function loadData() {
+            const data = localStorage.getItem(DB_KEY);
+            if (data) {
+                const parsed = JSON.parse(data);
+                currentUser = parsed.user;
+                chatHistory = parsed.messages || [];
+            }
+        }
+
+        function saveData() {
+            const data = {
+                user: currentUser,
+                messages: chatHistory
+            };
+            localStorage.setItem(DB_KEY, JSON.stringify(data));
+        }
+
+        // --- Auth Logic ---
+        function checkAuth() {
+            if (!currentUser) {
+                // No user found, show Registration
+                showScreen('login-screen');
+            } else {
+                // User exists, show Password Check
+                document.getElementById('welcome-msg').innerText = `Assalomu alaykum, ${currentUser.firstname}. Tizim sizni tanladi.`;
+                document.getElementById('display-alias').innerText = currentUser.alias;
+                showScreen('password-screen');
+            }
+        }
+
+        function handleRegister() {
+            const fullname = document.getElementById('reg-fullname').value.trim();
+            const alias = document.getElementById('reg-alias').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
+
+            if (!fullname || !alias || !pass) {
+                showToast("XATOLIK: Barcha maydonlarni to'ldiring!", true);
+                return;
+            }
+
+            // Create User
+            currentUser = {
+                firstname: fullname.split(' ')[0], // Take first word as name
+                fullname: fullname,
+                alias: alias,
+                password: pass // In a real app, hash this!
+            };
+
+            saveData();
+            showToast("Royxatdan o'tildi. Hush kelibsiz!");
+            enterChat();
+        }
+
+        function handleLogin() {
+            const inputPass = document.getElementById('login-pass').value.trim();
+            
+            if (inputPass === currentUser.password) {
+                showToast("Access Granted...", false);
+                document.getElementById('display-alias').innerText = currentUser.alias;
+                enterChat();
+            } else {
+                showToast("XATOLIK: Noto'g'ri parol!", true);
+                document.getElementById('login-pass').value = '';
+                document.getElementById('login-pass').focus();
+            }
+        }
+
+        function enterChat() {
+            showScreen('chat-app');
+            document.getElementById('msg-input').focus();
+            
+            // Add welcome message if first time
+            if (chatHistory.length === 0) {
+                addSystemMessage(`Foydalanuvchi ${currentUser.alias} tizimga ulandi.`);
+            } else {
+                renderMessages();
+            }
+        }
+
+        function logout() {
+            // Just show password screen again, don't delete data
+            document.getElementById('login-pass').value = '';
+            showScreen('password-screen');
+        }
+
+        // --- UI Helper Functions ---
+        function showScreen(screenId) {
+            document.querySelectorAll('.full-screen-center, #chat-app').forEach(el => el.classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.innerText = `>> ${msg}`;
+            toast.style.display = 'block';
+            toast.style.backgroundColor = isError ? 'var(--error-color)' : 'var(--primary-color)';
+            toast.style.color = isError ? '#fff' : '#000';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // --- Chat Functions ---
+        function sendMessage() {
+            const input = document.getElementById('msg-input');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            const newMessage = {
+                id: Date.now(),
+                text: text,
+                sender: currentUser.alias, // Sending own alias
+                isMine: true,
+                time: new Date().toLocaleTimeString()
+            };
+
+            chatHistory.push(newMessage);
+            saveData();
+            
+            // Render immediately
+            renderMessageElement(newMessage);
+            input.value = '';
+            
+            // Simulate "Hacker" auto-reply or system echo for effect (optional, kept simple here)
+            // scrollToBottom(); // Handled in render
+        }
+
+        function addSystemMessage(text) {
+            const msg = {
+                id: Date.now(),
+                text: text,
+                sender: 'SYSTEM',
+                isMine: false,
+                isSystem: true,
+                time: new Date().toLocaleTimeString()
+            };
+            chatHistory.push(msg);
+            saveData();
+            renderMessageElement(msg);
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('messages-container');
+            container.innerHTML = ''; // Clear current
+            chatHistory.forEach(msg => renderMessageElement(msg));
+        }
+
+        function renderMessageElement(msg) {
+            const container = document.getElementById('messages-container');
+            
+            const div = document.createElement('div');
+            div.className = `message ${msg.isMine ? 'mine' : 'others'} ${msg.isSystem ? 'system-msg' : ''}`;
+            
+            if (msg.isSystem) {
+                div.innerHTML = msg.text;
+            } else {
+                // If it's not mine, we attribute it to the stored sender name (which is own alias if we sent it)
+                // For a real chat, we would check if sender === currentUser.alias
+                // Here, 'mine' style is handled by class
+                
+                // For "others" (simulation), we might fake a sender if we wanted, 
+                // but based on requirements, user sees their own name.
+                // If it is NOT mine (simulated received), we show the sender name.
+                
+                let displaySender = msg.sender;
+                
+                // Hacker effect content
+                div.setAttribute('data-sender', displaySender); // For CSS pseudo-element
+                
+                div.innerHTML = `
+                    <div class="message-content">${msg.text}</div>
+                    <div class="timestamp">[${msg.time}]</div>
+                `;
+            }
+
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+    </script>
+</body>
+</html>
