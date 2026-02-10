@@ -3,143 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GLASS CHAT // PRIVATE</title>
+    <title>GLOBAL GLASS CHAT</title>
     <style>
-        /* --- GLASSMORPHISM & MOBILE STYLE --- */
+        /* --- GLASSMORPHISM DESIGN --- */
         :root {
             --glass-bg: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
-            --text-main: #ffffff;
-            --accent: #00d2ff;
-            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --accent: #00f260;
+            --accent-grad: linear-gradient(to right, #0575E6, #00f260);
+            --text: #ffffff;
+            --my-msg: rgba(0, 242, 96, 0.25);
+            --other-msg: rgba(255, 255, 255, 0.15);
+            --bg-anim: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Roboto, sans-serif; }
 
         body {
             margin: 0; padding: 0;
-            font-family: 'Segoe UI', Roboto, sans-serif;
             height: 100vh; overflow: hidden;
-            color: var(--text-main);
-            background: var(--bg-gradient);
+            color: var(--text);
+            background: var(--bg-anim);
             background-size: 400% 400%;
-            animation: gradientMove 15s ease infinite;
+            animation: gradientBG 15s ease infinite;
             display: flex; justify-content: center; align-items: center;
         }
 
-        @keyframes gradientMove {
+        @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Overlay */
         body::before {
             content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
-            background: rgba(0,0,0,0.2); backdrop-filter: blur(5px); z-index:0;
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(5px); z-index: 0;
         }
 
         .app-container {
-            position: relative; width: 100%; height: 100%; max-width: 500px;
+            position: relative; width: 100%; height: 100%; max-width: 480px;
             background: var(--glass-bg);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             z-index: 10; display: flex; flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
         @media (min-width: 500px) {
-            .app-container { height: 90vh; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+            .app-container { height: 90vh; border-radius: 20px; }
         }
 
         /* Screens */
         .screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 30px; background: rgba(0,0,0,0.4); z-index: 20;
+            padding: 30px; background: rgba(0,0,0,0.6); z-index: 20;
             transition: opacity 0.3s;
         }
         .hidden { opacity: 0; pointer-events: none; display: none; }
 
-        h2 { margin-bottom: 20px; font-weight: 300; letter-spacing: 1px; }
+        h2 { margin-bottom: 25px; font-weight: 300; letter-spacing: 1px; text-align: center; }
 
-        .input-group { width: 100%; margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 12px; opacity: 0.8; }
+        .input-group { width: 100%; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 13px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
         
         input {
-            width: 100%; padding: 15px; border-radius: 12px;
+            width: 100%; padding: 16px; border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.3);
             background: rgba(255,255,255,0.1); color: #fff; font-size: 16px;
-            outline: none; transition: 0.3s;
+            outline: none; transition: 0.3s; text-align: center;
         }
-        input:focus { background: rgba(255,255,255,0.2); border-color: var(--accent); }
+        input:focus { background: rgba(255,255,255,0.2); border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 242, 96, 0.2); }
+        input::placeholder { color: rgba(255,255,255,0.5); }
 
         button {
-            width: 100%; padding: 15px; border-radius: 12px;
-            border: none; background: var(--accent); color: #000;
+            width: 100%; padding: 16px; border-radius: 12px;
+            border: none; background: var(--accent-grad); color: #fff;
             font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px;
+            text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        button:active { transform: scale(0.98); }
-        .text-btn { background: none; color: #ccc; margin-top: 15px; font-size: 14px; }
+        button:active { transform: scale(0.96); }
+        .link-btn { background: none; color: #ccc; margin-top: 20px; font-size: 14px; text-transform: none; box-shadow: none; }
 
-        /* Chat Interface */
-        #chat-interface { display: flex; flex-direction: column; height: 100%; opacity: 0; transition: opacity 0.5s; }
-        #chat-interface.active { opacity: 1; }
+        /* Chat UI */
+        #chat-ui { display: flex; flex-direction: column; height: 100%; opacity: 0; transition: opacity 0.5s; }
+        #chat-ui.active { opacity: 1; }
 
         header {
-            padding: 15px; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--glass-border);
+            padding: 15px 20px; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--glass-border);
             display: flex; justify-content: space-between; align-items: center;
         }
 
-        #group-id-display { font-family: monospace; background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 5px; font-size: 12px; }
-
-        #msg-list {
-            flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
+        .my-id-badge {
+            background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 8px;
+            font-family: monospace; font-size: 16px; border: 1px solid var(--accent);
+            box-shadow: 0 0 10px rgba(0, 242, 96, 0.2);
+            color: #fff;
         }
 
-        /* Message Styles */
-        .msg { max-width: 80%; padding: 10px 15px; border-radius: 15px; font-size: 15px; position: relative; animation: popIn 0.3s; }
-        @keyframes popIn { from{opacity:0; transform:scale(0.9)} to{opacity:1; transform:scale(1)} }
+        #search-btn { 
+            background: #ffffff; color: #000;
+            width: auto; padding: 8px 15px; margin: 0; font-size: 12px; 
+            border: 1px solid #fff; font-weight: bold;
+        }
 
-        .msg.mine { align-self: flex-end; background: rgba(0, 210, 255, 0.3); border-bottom-right-radius: 2px; }
-        .msg.others { align-self: flex-start; background: rgba(255,255,255,0.15); border-bottom-left-radius: 2px; }
+        #msg-list { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
         
-        .msg-meta { font-size: 10px; opacity: 0.6; margin-bottom: 3px; display: block; }
+        .msg { max-width: 80%; padding: 12px 16px; border-radius: 18px; font-size: 15px; position: relative; animation: popIn 0.3s; }
+        @keyframes popIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
+
+        .msg.mine { align-self: flex-end; background: var(--my-msg); border-bottom-right-radius: 4px; border: 1px solid rgba(0, 242, 96, 0.3); }
+        .msg.others { align-self: flex-start; background: var(--other-msg); border-bottom-left-radius: 4px; }
+        
+        .msg-info { font-size: 10px; opacity: 0.7; margin-bottom: 4px; display: block; }
         .msg-time { font-size: 9px; opacity: 0.5; text-align: right; margin-top: 5px; }
 
-        .private-badge {
-            font-size: 9px; background: #ff0055; color: white; padding: 2px 5px; border-radius: 4px; margin-left: 5px;
-        }
+        .private-tag { background: #ff0055; color: white; padding: 2px 6px; border-radius: 4px; font-size: 9px; margin-left: 5px; vertical-align: middle; }
 
-        /* User List (Right Side Overlay) */
-        #user-list-panel {
-            position: absolute; top: 0; right: 0; width: 70%; height: 100%;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
-            border-left: 1px solid var(--glass-border); z-index: 30;
-            transform: translateX(100%); transition: transform 0.3s ease;
-            display: flex; flex-direction: column; padding: 20px;
-        }
-        #user-list-panel.open { transform: translateX(0); }
-        
-        .user-item {
-            padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);
-            cursor: pointer; display: flex; justify-content: space-between;
-        }
-        .user-item:active { background: rgba(255,255,255,0.1); }
-        .close-btn { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; }
-
-        /* Input Area */
         .input-area {
-            padding: 10px; background: rgba(0,0,0,0.2);
-            border-top: 1px solid var(--glass-border);
+            padding: 15px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--glass-border);
             display: flex; gap: 10px; align-items: center;
         }
-        .input-area input { flex: 1; padding: 12px; font-size: 14px; }
         
-        /* Mode Toggle */
-        .mode-indicator {
-            font-size: 10px; padding: 5px 10px; border-radius: 10px; background: rgba(255,255,255,0.1);
-            margin-right: 10px; text-align: center; max-width: 100px;
+        #mode-text {
+            font-size: 11px; background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 15px;
+            color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px;
         }
+        #mode-text.private { color: #ff0055; font-weight: bold; }
+
+        /* Search Modal */
+        #search-modal {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+            z-index: 50; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        #search-modal.open { opacity: 1; pointer-events: auto; }
+        .search-box { width: 80%; text-align: center; }
 
     </style>
 </head>
@@ -148,187 +148,222 @@
     <div class="app-container">
         
         <!-- 1. REGISTER SCREEN -->
-        <div id="register-screen" class="screen">
+        <div id="reg-screen" class="screen">
             <h2>ROYXATDAN O'TISH</h2>
             <div class="input-group">
-                <label>ISMINIZ (Yagona bo'lishi kerak)</label>
-                <input type="text" id="reg-name" placeholder="Masalan: Jasur">
+                <label>ISMINGIZ</label>
+                <input type="text" id="reg-name" placeholder="Ism kiriting">
             </div>
             <div class="input-group">
                 <label>PAROL</label>
-                <input type="password" id="reg-pass" placeholder="Xavfsiz parol">
+                <input type="password" id="reg-pass" placeholder="Parol kiriting">
             </div>
-            <button onclick="register()">SAQLASH</button>
-            <button class="text-btn" onclick="showLogin()">Hisobingiz bormi?</button>
+            <button onclick="registerUser()">CHATGA KIRISH</button>
+            <button class="link-btn" onclick="showScreen('login-screen')">Hisobingiz bormi?</button>
         </div>
 
         <!-- 2. LOGIN SCREEN -->
         <div id="login-screen" class="screen hidden">
             <h2>TIZIMGA KIRISH</h2>
             <div class="input-group">
-                <label>ISMINIZ</label>
+                <label>ISMINGIZ</label>
                 <input type="text" id="login-name" placeholder="Ismingizni kiriting">
             </div>
             <div class="input-group">
                 <label>PAROL</label>
                 <input type="password" id="login-pass" placeholder="Parol">
             </div>
-            <button onclick="login()">KIRISH</button>
-            <button class="text-btn" onclick="showRegister()">Ro'yxatdan o'tish</button>
+            <button onclick="loginUser()">KIRISH</button>
+            <button class="link-btn" onclick="showScreen('reg-screen')">Ro'yxatdan o'tish</button>
         </div>
 
-        <!-- 3. CHAT INTERFACE -->
-        <div id="chat-interface">
+        <!-- 3. CHAT UI -->
+        <div id="chat-ui">
             <header>
-                <div style="display:flex; flex-direction:column;">
-                    <span style="font-weight:bold;">Xavfsiz Chat</span>
-                    <span id="group-id-display" style="color:var(--accent);">Loading ID...</span>
+                <div class="my-id-badge">
+                    ID: <span id="display-id">----</span>
                 </div>
-                <button onclick="toggleUserList()" style="width:auto; padding: 8px 15px; font-size:12px; margin:0;">Foydalanuvchilar</button>
+                <button id="search-btn" onclick="openSearch()">ID QIDIRISH</button>
             </header>
 
             <div id="msg-list">
-                <!-- Messages -->
+                <!-- Messages go here -->
             </div>
 
             <div class="input-area">
-                <div id="mode-indicator" class="mode-indicator">Umumiy</div>
-                <input type="text" id="msg-input" placeholder="Xabar yozing..." autocomplete="off">
-                <button onclick="toggleUserList()" style="width:auto; padding:0 15px; margin:0;">></button>
+                <div id="mode-text">Umumiy Chat</div>
+                <input type="text" id="msg-input" placeholder="Xabar yozing..." autocomplete="off" style="flex:1;">
+                <button onclick="sendMessage()" style="width: auto; margin: 0; padding: 12px 20px;">YUBORISH</button>
             </div>
         </div>
 
-        <!-- USER LIST SIDEBAR -->
-        <div id="user-list-panel">
-            <div class="close-btn" onclick="toggleUserList()">&times;</div>
-            <h3 style="margin-top:30px; border-bottom:1px solid #555; padding-bottom:10px;">A'zolar</h3>
-            <div id="users-container">
-                <!-- Users will be listed here -->
-            </div>
-            <div style="margin-top:auto; padding:20px; font-size:12px; color:#888;">
-                Ism ustiga bosib shaxsiy xabar yuborishingiz mumkin.
+        <!-- 4. ID SEARCH MODAL -->
+        <div id="search-modal">
+            <h2 style="margin-bottom: 20px;">ID ORQALI QIDIRISH</h2>
+            <div class="search-box">
+                <input type="number" id="search-id-input" placeholder="4 xonali ID kiriting (masalan: 4821)">
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button onclick="performSearch()" style="flex:1; background: var(--accent);">QIDIRISH</button>
+                    <button onclick="closeSearch()" style="flex:1; background: #ff4444;">BEKOR QILISH</button>
+                </div>
+                <p id="search-result" style="margin-top: 15px; color: #ffcc00; min-height: 20px;"></p>
             </div>
         </div>
 
     </div>
 
     <script>
-        /* --- CHAT LOGIC --- */
-
-        // Dastlabki o'rnatish: Random Group ID generatsiya qilish (Bitta dastur uchun)
-        // Haqiqiy server bo'lmagani uchun, biz fayl nomi o'rniga LocalStorage'da umumiy kalitdan foydalanamiz.
-        // Ikki qurilma bir xil kalitni ishlatishi uchun biz "hardcoded" ID beramiz yoki input orqali.
+        /* --- GLOBAL SETTINGS --- */
+        // Barcha qurilmalar bir-birini ko'rishi uchun umumiy kalit
+        const SHARED_KEY = "universal_chat_db_v2"; 
         
-        // Soddalik uchun: Siz kiritgan ID bo'yicha ishlash.
-        let GROUP_KEY = "global_chat_v3"; 
         let currentUser = null;
-        let messages = [];
-        let privateTarget = null; // Kimga yozayotganimiz (null = barchaga)
+        let chatData = null;
+        let privateTargetID = null; // null = umumiy, raqam = shu ID ga
 
         window.onload = function() {
-            // Brauzer refresh bo'lsa ham login qolishi uchun
-            const savedName = localStorage.getItem('glass_chat_last_user');
-            if(savedName) {
-                document.getElementById('login-name').value = savedName;
-            }
+            const lastUser = localStorage.getItem('last_user_name');
+            if(lastUser) document.getElementById('login-name').value = lastUser;
 
-            // Sync
+            // Sync across tabs/devices
             window.addEventListener('storage', (e) => {
-                if(e.key === GROUP_KEY) {
-                    loadMessages();
+                if(e.key === SHARED_KEY) {
+                    loadChatData();
                 }
             });
-
-            // Enter keys
-            document.getElementById('reg-pass').addEventListener('keypress', (e)=>{if(e.key==='Enter') register()});
-            document.getElementById('login-pass').addEventListener('keypress', (e)=>{if(e.key==='Enter') login()});
-            document.getElementById('msg-input').addEventListener('keypress', (e)=>{if(e.key==='Enter') sendMessage()});
         };
 
-        function showRegister() {
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('register-screen').classList.remove('hidden');
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            if(id !== 'chat-ui') document.getElementById(id).classList.remove('hidden');
         }
 
-        function showLogin() {
-            document.getElementById('register-screen').classList.add('hidden');
-            document.getElementById('login-screen').classList.remove('hidden');
-        }
-
+        // --- AUTH ---
         function getDB() {
-            const raw = localStorage.getItem(GROUP_KEY);
+            const raw = localStorage.getItem(SHARED_KEY);
             if(!raw) return { users: [], messages: [] };
             return JSON.parse(raw);
         }
 
         function saveDB(data) {
-            localStorage.setItem(GROUP_KEY, JSON.stringify(data));
+            localStorage.setItem(SHARED_KEY, JSON.stringify(data));
         }
 
-        // --- REGISTER ---
-        function register() {
+        function generateID() {
+            // 4 xonali takrorlanmas ID generatsiya qilish
+            let id;
+            let db = getDB();
+            let exists = true;
+            
+            while(exists) {
+                id = Math.floor(1000 + Math.random() * 9000).toString();
+                exists = db.users.some(u => u.id === id);
+            }
+            return id;
+        }
+
+        function registerUser() {
             const name = document.getElementById('reg-name').value.trim();
             const pass = document.getElementById('reg-pass').value.trim();
 
             if(!name || !pass) return alert("Ism va parol kiritish shart!");
 
-            const db = getDB();
+            let db = getDB();
 
-            // Ism bandmi? (ID vazifasi)
-            const exists = db.users.find(u => u.name.toLowerCase() === name.toLowerCase());
-            if(exists) {
-                return alert("Bu ism allaqachon band! Boshqa ism tanlang.");
+            // Ism tekshirish
+            if(db.users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
+                return alert("Bu ism allaqachon olingan!");
             }
 
-            const newUser = { name: name, password: pass };
-            db.users.push(newUser);
-            db.messages.push({
-                id: Date.now(),
-                type: 'system',
-                text: `${name} chatga qo'shildi.`,
-                time: new Date().toLocaleTimeString()
-            });
+            const newID = generateID();
+            const newUser = { name: name, password: pass, id: newID };
 
+            db.users.push(newUser);
             saveDB(db);
+
             currentUser = newUser;
-            localStorage.setItem('glass_chat_last_user', name);
-            
+            localStorage.setItem('last_user_name', name);
             enterChat();
         }
 
-        // --- LOGIN ---
-        function login() {
+        function loginUser() {
             const name = document.getElementById('login-name').value.trim();
             const pass = document.getElementById('login-pass').value.trim();
 
-            const db = getDB();
+            let db = getDB();
             const user = db.users.find(u => u.name.toLowerCase() === name.toLowerCase());
 
-            if(!user) return alert("Bunday foydalanuvchi topilmadi.");
-            if(user.password !== pass) return alert("Parol noto'g'ri!");
+            if(!user || user.password !== pass) {
+                return alert("Ism yoki parol noto'g'ri!");
+            }
 
             currentUser = user;
-            localStorage.setItem('glass_chat_last_user', name);
+            localStorage.setItem('last_user_name', name);
             enterChat();
         }
 
+        // --- CHAT ---
         function enterChat() {
-            document.getElementById('register-screen').classList.add('hidden');
+            // Hide auth screens
+            document.getElementById('reg-screen').classList.add('hidden');
             document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('chat-interface').classList.add('active');
-            
-            // Display Group ID (Shared key simulyatsiyasi)
-            document.getElementById('group-id-display').innerText = "ID: " + GROUP_KEY;
+            document.getElementById('chat-ui').classList.add('active');
 
-            loadMessages();
+            document.getElementById('display-id').innerText = currentUser.id;
+            loadChatData();
         }
 
-        // --- MESSAGING ---
-        function loadMessages() {
-            const db = getDB();
-            messages = db.messages;
+        function loadChatData() {
+            const raw = localStorage.getItem(SHARED_KEY);
+            if(!raw) return;
+            chatData = JSON.parse(raw);
             renderMessages();
-            renderUserList(db.users);
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('msg-list');
+            container.innerHTML = '';
+
+            chatData.messages.forEach(msg => {
+                // Xabarni ko'rsatish shartlari:
+                // 1. Umumiy xabar (to: null)
+                // 2. Menga yuborilgan (to: myID)
+                // 3. Men yuborgan (sender: myID)
+
+                let show = false;
+                if(msg.to === null) show = true;
+                else if(msg.to === currentUser.id) show = true;
+                else if(msg.senderID === currentUser.id) show = true;
+
+                if(!show) return;
+
+                const isMine = (msg.senderID === currentUser.id);
+                const div = document.createElement('div');
+                div.className = `msg ${isMine ? 'mine' : 'others'}`;
+
+                // Qachonki shaxsiy xabar bo'lsa
+                let privateTag = '';
+                let senderName = msg.senderName;
+                
+                if(msg.to !== null) {
+                    if(msg.to === currentUser.id) {
+                        privateTag = '<span class="private-tag">Shaxsiy</span>';
+                        senderName = msg.senderName;
+                    } else {
+                        privateTag = `<span class="private-tag">Shaxsiy: ${msg.toName}</span>`;
+                        senderName = "Siz";
+                    }
+                }
+
+                div.innerHTML = `
+                    <span class="msg-info">${senderName} ${privateTag}</span>
+                    ${msg.text}
+                    <div class="msg-time">${msg.time}</div>
+                `;
+                container.appendChild(div);
+            });
+
+            container.scrollTop = container.scrollHeight;
         }
 
         function sendMessage() {
@@ -336,120 +371,92 @@
             const text = input.value.trim();
             if(!text) return;
 
-            const db = getDB();
+            let toName = null;
+            if(privateTargetID) {
+                // ID bo'yicha ismni topish
+                const targetUser = chatData.users.find(u => u.id === privateTargetID);
+                if(targetUser) toName = targetUser.name;
+                else {
+                    alert("Foydalanuvchi topilmadi.");
+                    privateTargetID = null;
+                    updateChatMode();
+                    return;
+                }
+            }
 
-            const msgObj = {
-                id: Date.now(),
-                sender: currentUser.name,
+            const newMsg = {
+                senderID: currentUser.id,
+                senderName: currentUser.name,
+                to: privateTargetID,
+                toName: toName,
                 text: text,
-                time: new Date().toLocaleTimeString(),
-                to: privateTarget // null = hammasiga, string = shu odamga
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
-            db.messages.push(msgObj);
+            // Ma'lumotlarni yangilab saqlash
+            let db = getDB();
+            db.messages.push(newMsg);
             saveDB(db);
-            
+
             input.value = '';
-            loadMessages(); // Refresh UI
+            loadChatData();
         }
 
-        function renderMessages() {
-            const container = document.getElementById('msg-list');
-            container.innerHTML = '';
-
-            messages.forEach(msg => {
-                // Shaxsiy xabar filteri
-                // 1. Agar xabar umumiy bo'lsa (msg.to === null)
-                // 2. Agar xabar men yuborgan bo'lsam
-                // 3. Agar xabar menga yuborilgan bo'lsa
-                
-                let isVisible = false;
-                if(msg.type === 'system') {
-                    isVisible = true;
-                } else {
-                    if (msg.to === null) {
-                        isVisible = true; // Umumiy
-                    } else if (msg.to === currentUser.name) {
-                        isVisible = true; // Menga kelgan
-                    } else if (msg.sender === currentUser.name) {
-                        isVisible = true; // Men yuborgan
-                    }
-                }
-
-                if(!isVisible) return;
-
-                const isMine = (msg.sender === currentUser.name);
-                const div = document.createElement('div');
-                div.className = `msg ${isMine ? 'mine' : 'others'}`;
-
-                let extraInfo = '';
-                if(msg.to && msg.to !== currentUser.name) {
-                    extraInfo = `<span class="private-badge">Shaxsiy: ${msg.to}</span>`;
-                } else if (msg.to && msg.to === currentUser.name && !isMine) {
-                    extraInfo = `<span class="private-badge">Shaxsiy sizga</span>`;
-                }
-
-                const senderDisplay = msg.type === 'system' ? 'SYSTEM' : msg.sender;
-
-                div.innerHTML = `
-                    <span class="msg-meta">${senderDisplay} ${extraInfo}</span>
-                    ${msg.text}
-                    <div class="msg-time">${msg.time}</div>
-                `;
-                container.appendChild(div);
-            });
-            container.scrollTop = container.scrollHeight;
+        // --- ID SEARCH ---
+        function openSearch() {
+            document.getElementById('search-modal').classList.add('open');
+            document.getElementById('search-id-input').value = '';
+            document.getElementById('search-result').innerText = '';
         }
 
-        // --- USER LIST & PRIVATE CHAT ---
-        function renderUserList(users) {
-            const container = document.getElementById('users-container');
-            container.innerHTML = '';
-
-            // "Umumiy" varianti
-            const allDiv = document.createElement('div');
-            allDiv.className = 'user-item';
-            allDiv.style.background = (privateTarget === null) ? 'rgba(0, 210, 255, 0.3)' : 'transparent';
-            allDiv.innerHTML = `<span>🌐 Hamma (Umumiy)</span>`;
-            allDiv.onclick = () => selectUser(null);
-            container.appendChild(allDiv);
-
-            users.forEach(u => {
-                if(u.name === currentUser.name) return; // O'zini ko'rsatmaslik
-
-                const div = document.createElement('div');
-                div.className = 'user-item';
-                div.style.background = (privateTarget === u.name) ? 'rgba(0, 210, 255, 0.3)' : 'transparent';
-                div.innerHTML = `<span>👤 ${u.name}</span>`;
-                div.onclick = () => selectUser(u.name);
-                container.appendChild(div);
-            });
+        function closeSearch() {
+            document.getElementById('search-modal').classList.remove('open');
         }
 
-        function selectUser(name) {
-            privateTarget = name;
-            toggleUserList(); // Yopish
+        function performSearch() {
+            const idInput = document.getElementById('search-id-input').value.trim();
+            const db = getDB();
+            const found = db.users.find(u => u.id === idInput);
+
+            const resDiv = document.getElementById('search-result');
             
-            const indicator = document.getElementById('mode-indicator');
-            const input = document.getElementById('msg-input');
-            
-            if(name === null) {
-                indicator.innerText = "Umumiy";
-                indicator.style.background = "rgba(255,255,255,0.1)";
-                input.placeholder = "Xabar yozing (hammaga)...";
+            if(found) {
+                if(found.id === currentUser.id) {
+                    resDiv.innerText = "Bu o'zingizning IDingiz!";
+                    return;
+                }
+                resDiv.innerHTML = `Topildi: <b>${found.name}</b> <br><button onclick='startPrivateChat("${found.id}", "${found.name}")' style='margin-top:10px; font-size:12px; padding:8px;'>Unga yozish</button>`;
             } else {
-                indicator.innerText = `Shaxsiy: ${name}`;
-                indicator.style.background = "#ff0055";
-                input.placeholder = `${name} ga yozish...`;
+                resDiv.innerText = "Bunday IDga ega foydalanuvchi yo'q.";
             }
-            
-            // Xabarlarni qayta render qilish (filter uchun)
-            renderMessages();
         }
 
-        function toggleUserList() {
-            document.getElementById('user-list-panel').classList.toggle('open');
+        function startPrivateChat(id, name) {
+            privateTargetID = id;
+            updateChatMode();
+            closeSearch();
         }
+
+        function updateChatMode() {
+            const modeText = document.getElementById('mode-text');
+            const input = document.getElementById('msg-input');
+
+            if(privateTargetID) {
+                modeText.innerText = `ID: ${privateTargetID}`;
+                modeText.classList.add('private');
+                input.placeholder = "Shaxsiy xabar yozing...";
+            } else {
+                modeText.innerText = "Umumiy Chat";
+                modeText.classList.remove('private');
+                input.placeholder = "Xabar yozing...";
+            }
+        }
+
+        // Enter key listeners
+        document.getElementById('reg-pass').addEventListener('keypress', e => { if(e.key==='Enter') registerUser(); });
+        document.getElementById('login-pass').addEventListener('keypress', e => { if(e.key==='Enter') loginUser(); });
+        document.getElementById('msg-input').addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
+        document.getElementById('search-id-input').addEventListener('keypress', e => { if(e.key==='Enter') performSearch(); });
 
     </script>
 </body>
