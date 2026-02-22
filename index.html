@@ -2,465 +2,540 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GLOBAL GLASS CHAT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- --- SEO Meta Teglar --- -->
+    <title>SHADOW MARKET | Shifrlangan Izohlar</title>
+    <meta name="description" content="Shadow Market - faqat izohlar shifrlanadigan maxfiy savdo platformasi.">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:title" content="SHADOW MARKET">
+    <meta property="og:image" content="https://picsum.photos/seed/shadow/1200/630">
+
     <style>
-        /* --- DESIGN --- */
+        /* --- STILAR --- */
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --accent: #00f260;
-            --accent-grad: linear-gradient(to right, #0575E6, #00f260);
-            --text: #ffffff;
-            --my-msg: rgba(0, 242, 96, 0.25);
-            --other-msg: rgba(255, 255, 255, 0.15);
-            --bg-anim: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            --bg-color: #0d0d0d;
+            --card-bg: #1a1a1a;
+            --text-main: #e0e0e0;
+            --text-muted: #888;
+            --accent-color: #00ff41; 
+            --accent-hover: #00cc33;
+            --danger-color: #ff3333;
+            --border-color: #333;
+            --font-family: 'Courier New', Courier, monospace;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Roboto, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            margin: 0; padding: 0;
-            height: 100vh; overflow: hidden;
-            color: var(--text);
-            background: var(--bg-anim);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            display: flex; justify-content: center; align-items: center;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            line-height: 1.6;
+            padding-bottom: 50px;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        body::before {
-            content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
-            background: rgba(0,0,0,0.3); backdrop-filter: blur(5px); z-index: 0;
-        }
-
-        .app-container {
-            position: relative; width: 100%; height: 100%; max-width: 480px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            z-index: 10; display: flex; flex-direction: column;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
-        @media (min-width: 500px) {
-            .app-container { height: 90vh; border-radius: 20px; }
-        }
-
-        /* Screens */
-        .screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 30px; background: rgba(0,0,0,0.6); z-index: 20;
-            transition: opacity 0.3s;
-        }
-        .hidden { opacity: 0; pointer-events: none; display: none; }
-
-        h2 { margin-bottom: 25px; font-weight: 300; letter-spacing: 1px; text-align: center; }
-
-        .input-group { width: 100%; margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 13px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
-        
-        input {
-            width: 100%; padding: 16px; border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1); color: #fff; font-size: 16px;
-            outline: none; transition: 0.3s; text-align: center;
-        }
-        input:focus { background: rgba(255,255,255,0.2); border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 242, 96, 0.2); }
-        input::placeholder { color: rgba(255,255,255,0.5); }
-
-        button {
-            width: 100%; padding: 16px; border-radius: 12px;
-            border: none; background: var(--accent-grad); color: #fff;
-            font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px;
-            text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        button:active { transform: scale(0.96); }
-        .link-btn { background: none; color: #ccc; margin-top: 20px; font-size: 14px; text-transform: none; box-shadow: none; }
-
-        /* Chat UI */
-        #chat-ui { display: flex; flex-direction: column; height: 100%; opacity: 0; transition: opacity 0.5s; }
-        #chat-ui.active { opacity: 1; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
 
         header {
-            padding: 15px 20px; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--glass-border);
-            display: flex; justify-content: space-between; align-items: center;
+            background-color: #000;
+            border-bottom: 2px solid var(--accent-color);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .my-id-badge {
-            background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 8px;
-            font-family: monospace; font-size: 14px; border: 1px solid var(--accent);
-            color: #fff;
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px var(--accent-color);
         }
 
-        #users-btn { 
-            background: #ffffff; color: #000;
-            width: auto; padding: 8px 15px; margin: 0; font-size: 12px; 
-            border: 1px solid #fff; font-weight: bold;
+        .nav-actions button {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 8px 15px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-left: 10px;
         }
 
-        #msg-list { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .nav-actions button:hover {
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        /* --- Modal --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-color);
+            padding: 25px;
+            width: 90%;
+            max-width: 500px;
+            margin: 20px 0;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--danger-color);
+        }
+
+        /* --- Rasm Yuklash Stili --- */
+        .file-upload-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            text-align: center;
+            border-radius: 4px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .file-upload-wrapper:hover {
+            border-color: var(--accent-color);
+            background-color: #111;
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        #previewImage {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+            border: 1px solid var(--accent-color);
+        }
+
+        /* --- Forma --- */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--accent-color); font-size: 0.9rem; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 10px;
+            background-color: #000;
+            border: 1px solid var(--border-color);
+            color: #fff; font-family: inherit;
+        }
         
-        .msg { max-width: 80%; padding: 12px 16px; border-radius: 18px; font-size: 15px; position: relative; animation: popIn 0.3s; }
-        @keyframes popIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
+        /* Izoh kiritish qismi maxsus rangda */
+        .comment-input {
+            background-color: #050505 !important;
+            color: var(--accent-color) !important;
+            font-weight: bold;
+        }
 
-        .msg.mine { align-self: flex-end; background: var(--my-msg); border-bottom-right-radius: 4px; border: 1px solid rgba(0, 242, 96, 0.3); }
-        .msg.others { align-self: flex-start; background: var(--other-msg); border-bottom-left-radius: 4px; }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--accent-color);
+        }
+
+        .submit-btn {
+            width: 100%; padding: 12px;
+            background-color: var(--accent-color);
+            color: #000; border: none;
+            font-weight: bold; cursor: pointer;
+            text-transform: uppercase;
+        }
+        .submit-btn:hover { background-color: var(--accent-hover); }
+
+        /* --- Grid va Karta --- */
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+        .feed-header { text-align: center; margin-bottom: 30px; border-bottom: 1px dashed var(--border-color); padding-bottom: 10px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .product-card:hover { border-color: var(--accent-color); }
+
+        .product-img {
+            width: 100%; height: 200px; object-fit: cover;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #000;
+        }
+
+        .product-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .seller-info { font-size: 0.8rem; color: var(--accent-color); margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .product-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; color: #fff; }
+        .product-desc { font-size: 0.9rem; color: #ccc; margin-bottom: 15px; flex-grow: 1; }
+        .product-meta { border-top: 1px solid var(--border-color); padding-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+        .price-tag { font-weight: bold; color: var(--accent-color); }
+
+        .card-actions { display: flex; gap: 10px; margin-top: 10px; }
+        .action-btn { flex: 1; padding: 5px; background: #222; border: 1px solid #444; color: #fff; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .action-btn:hover { background: #333; }
+        .btn-like.liked { color: #ff3333; border-color: #ff3333; }
+        .btn-delete { color: var(--danger-color); border-color: var(--danger-color); display: none; }
+        .btn-delete:hover { background: var(--danger-color); color: #fff; }
+
+        /* Izohlar */
+        .comments-section { background-color: #111; margin-top: 10px; padding: 10px; border-top: 1px solid var(--border-color); display: none; }
+        .comments-section.open { display: block; }
+        .comment-list { margin-bottom: 10px; max-height: 100px; overflow-y: auto; }
+        .comment-item { font-size: 0.75rem; margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 3px; }
+        .comment-user { color: var(--accent-color); font-weight: bold; }
         
-        .msg-info { font-size: 10px; opacity: 0.7; margin-bottom: 4px; display: block; }
-        .msg-time { font-size: 9px; opacity: 0.5; text-align: right; margin-top: 5px; }
-
-        .private-tag { background: #ff0055; color: white; padding: 2px 6px; border-radius: 4px; font-size: 9px; margin-left: 5px; vertical-align: middle; }
-
-        .input-area {
-            padding: 15px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--glass-border);
-            display: flex; gap: 10px; align-items: center;
+        /* Shifrlangan izoh matni uchun rang */
+        .comment-text {
+            color: #aaa;
+            font-family: monospace;
         }
         
-        #mode-text {
-            font-size: 11px; background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 15px;
-            color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px;
+        .comment-input-group { display: flex; gap: 5px; }
+        /* Izoh yozish maydoni */
+        .comment-input-field {
+            flex: 1; padding: 5px; font-size: 0.8rem; background: #000; border: 1px solid #333; color: var(--accent-color); font-family: 'Courier New', monospace;
         }
-        #mode-text.private { color: #ff0055; font-weight: bold; }
 
-        /* Users Sidebar (Drawer) */
-        #users-drawer {
-            position: absolute; top: 0; right: 0; width: 75%; height: 100%;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(20px);
-            z-index: 50; display: flex; flex-direction: column;
-            transform: translateX(100%); transition: transform 0.3s ease;
-            border-left: 1px solid var(--glass-border);
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 2px; padding: 16px; position: fixed;
+            z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            border: 1px solid var(--accent-color);
         }
-        #users-drawer.open { transform: translateX(0); }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 
-        .drawer-header { padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
-        .close-drawer { font-size: 24px; cursor: pointer; color: #fff; }
-        
-        .user-list { flex: 1; overflow-y: auto; }
-        .user-item {
-            padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; transition: 0.2s;
-        }
-        .user-item:active { background: rgba(255,255,255,0.1); }
-        .user-info { font-weight: bold; font-size: 15px; }
-        .user-id-tag { font-size: 12px; opacity: 0.6; font-family: monospace; background: rgba(255,255,255,0.1); padding: 2px 5px; border-radius: 4px; }
-
-        /* Overlay to close drawer */
-        #overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 40;
-            opacity: 0; pointer-events: none; transition: 0.3s;
-        }
-        #overlay.open { opacity: 1; pointer-events: auto; }
-
+        .empty-state { text-align: center; color: var(--text-muted); margin-top: 50px; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <!-- 1. REGISTER SCREEN -->
-        <div id="reg-screen" class="screen">
-            <h2>ROYXATDAN O'TISH</h2>
-            <div class="input-group">
-                <label>ISMINGIZ</label>
-                <input type="text" id="reg-name" placeholder="Ism kiriting">
-            </div>
-            <div class="input-group">
-                <label>PAROL</label>
-                <input type="password" id="reg-pass" placeholder="Parol kiriting">
-            </div>
-            <button onclick="registerUser()">CHATGA KIRISH</button>
-            <button class="link-btn" onclick="showScreen('login-screen')">Hisobingiz bormi?</button>
+    <header>
+        <div class="logo">SHADOW<span style="color:#fff">MARKET</span></div>
+        <div class="nav-actions">
+            <button onclick="openAddModal()">+ POST QO'SHISH</button>
+            <button onclick="clearAllData()">TOZALASH</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="feed-header">
+            <h2>SO'NGGI E'LONLAR</h2>
+            <p style="font-size: 0.8rem; color: #666;">Izohlar shifrlanadi</p>
         </div>
 
-        <!-- 2. LOGIN SCREEN -->
-        <div id="login-screen" class="screen hidden">
-            <h2>TIZIMGA KIRISH</h2>
-            <div class="input-group">
-                <label>ISMINGIZ</label>
-                <input type="text" id="login-name" placeholder="Ismingizni kiriting">
-            </div>
-            <div class="input-group">
-                <label>PAROL</label>
-                <input type="password" id="login-pass" placeholder="Parol">
-            </div>
-            <button onclick="loginUser()">KIRISH</button>
-            <button class="link-btn" onclick="showScreen('reg-screen')">Ro'yxatdan o'tish</button>
-        </div>
+        <div id="productsGrid" class="products-grid"></div>
+        <div id="emptyState" class="empty-state" style="display: none;"><p>Hozircha e'lonlar yo'q.</p></div>
+    </main>
 
-        <!-- 3. CHAT UI -->
-        <div id="chat-ui">
-            <header>
-                <div class="my-id-badge">
-                    ID: <span id="display-id">----</span>
+    <!-- Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAddModal()">&times;</span>
+            <h2 style="color: var(--accent-color); margin-bottom: 20px;">YANGI E'LON</h2>
+            <form id="productForm">
+                
+                <!-- RASM -->
+                <div class="file-upload-wrapper">
+                    <p style="color: var(--text-muted);">📁 RASMNI TANLANG</p>
+                    <input type="file" id="imgUpload" accept="image/*" onchange="previewFile()">
+                    <img id="previewImage" alt="Oldindan ko'rish">
                 </div>
-                <button id="users-btn" onclick="toggleDrawer()">FOYDALANUVCHILAR</button>
-            </header>
 
-            <div id="msg-list">
-                <!-- Messages go here -->
-            </div>
+                <!-- NOMI (Oddiy) -->
+                <div class="form-group">
+                    <label>MAHSULOT NOMI</label>
+                    <input type="text" id="prodTitle" placeholder="Nomi..." required>
+                </div>
 
-            <div class="input-area">
-                <div id="mode-text">Umumiy Chat</div>
-                <input type="text" id="msg-input" placeholder="Xabar yozing..." autocomplete="off" style="flex:1;">
-                <button onclick="sendMessage()" style="width: auto; margin: 0; padding: 12px 20px;">YUBORISH</button>
-            </div>
+                <div class="form-group">
+                    <label>NARX</label>
+                    <input type="text" id="prodPrice" required>
+                </div>
+
+                <!-- IZOH (Oddiy) -->
+                <div class="form-group">
+                    <label>IZOH</label>
+                    <textarea id="prodDesc" rows="3" placeholder="Tavsif..." required></textarea>
+                </div>
+
+                <hr style="border-color: #333; margin: 15px 0;">
+
+                <div class="form-group">
+                    <label>SOTUVCHI ISMI / FIRMA</label>
+                    <input type="text" id="sellerName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>TELEGRAM USER / NOMER</label>
+                    <input type="text" id="sellerContact" required>
+                </div>
+
+                <button type="submit" class="submit-btn">E'LONNI JONATISH</button>
+            </form>
         </div>
-
-        <!-- 4. USERS DRAWER (SIDEBAR) -->
-        <div id="overlay" onclick="toggleDrawer()"></div>
-        <div id="users-drawer">
-            <div class="drawer-header">
-                <h3 style="margin:0;">A'ZOLAR RO'YXATI</h3>
-                <span class="close-drawer" onclick="toggleDrawer()">&times;</span>
-            </div>
-            <div id="users-list-container" class="user-list">
-                <!-- User items will be injected here -->
-            </div>
-        </div>
-
     </div>
 
+    <div id="toast">Xabar</div>
+
     <script>
-        /* --- GLOBAL SETTINGS --- */
-        const SHARED_KEY = "universal_chat_db_v3"; 
-        
-        let currentUser = null;
-        let chatData = null;
-        let privateTargetID = null; // null = umumiy, raqam = shu ID ga
+        // --- O'ZGARUVCHILAR ---
+        let currentUserId = localStorage.getItem('shadowMarketUserId') || 'user_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('shadowMarketUserId', currentUserId);
+        let uploadedImageBase64 = '';
 
-        window.onload = function() {
-            const lastUser = localStorage.getItem('last_user_name');
-            if(lastUser) document.getElementById('login-name').value = lastUser;
-
-            window.addEventListener('storage', (e) => {
-                if(e.key === SHARED_KEY) {
-                    loadChatData();
-                }
-            });
+        // --- SHIFRLASH JADVALI ---
+        const cipherMap = {
+            'S': '1', 's': '1!',
+            'A': '2', 'a': '2!',
+            'L': '3', 'l': '3!',
+            'O': '4', 'o': '4!',
+            'M': '5', 'm': '5!',
+            'I': '6', 'i': '6!',
+            'K': '7', 'k': '7!',
+            'R': '8', 'r': '8!',
+            'T': '9', 't': '9!',
+            ' ': '0'
         };
 
-        function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-            if(id !== 'chat-ui') document.getElementById(id).classList.remove('hidden');
+        // --- SHIFRLASH FUNKSIYASI ---
+        function encryptText(text) {
+            return text.split('').map(char => {
+                return cipherMap[char] || char;
+            }).join('');
         }
 
-        // --- AUTH ---
-        function getDB() {
-            const raw = localStorage.getItem(SHARED_KEY);
-            if(!raw) return { users: [], messages: [] };
-            return JSON.parse(raw);
-        }
-
-        function saveDB(data) {
-            localStorage.setItem(SHARED_KEY, JSON.stringify(data));
-        }
-
-        function generateID() {
-            let id;
-            let db = getDB();
-            let exists = true;
-            while(exists) {
-                id = Math.floor(1000 + Math.random() * 9000).toString();
-                exists = db.users.some(u => u.id === id);
+        // --- COMMENT ENCRYPTION EVENT ---
+        // Sahifa yuklanganda izoh maydonlaridagi hodisalarni kuzatamiz
+        document.addEventListener('input', function(e) {
+            // Faqat class'i 'comment-input-field' bo'lgan inputlarni qidiramiz
+            if (e.target.classList.contains('comment-input-field')) {
+                const input = e.target;
+                // Kiritilayotgan matnni shifrlaymiz
+                input.value = encryptText(input.value);
+                // Kursor oxiriga qo'yamiz (matn o'zgargani uchun)
+                input.selectionStart = input.selectionEnd = input.value.length;
             }
-            return id;
+        });
+
+        // --- QOLGAN FUNKSIYALAR ---
+
+        function getProducts() {
+            return JSON.parse(localStorage.getItem('shadowMarketProducts') || '[]');
         }
 
-        function registerUser() {
-            const name = document.getElementById('reg-name').value.trim();
-            const pass = document.getElementById('reg-pass').value.trim();
-            if(!name || !pass) return alert("Ism va parol kiritish shart!");
-            let db = getDB();
-            if(db.users.some(u => u.name.toLowerCase() === name.toLowerCase())) return alert("Bu ism allaqachon olingan!");
-
-            const newID = generateID();
-            const newUser = { name: name, password: pass, id: newID };
-            db.users.push(newUser);
-            saveDB(db);
-
-            currentUser = newUser;
-            localStorage.setItem('last_user_name', name);
-            enterChat();
+        function saveProducts(products) {
+            try {
+                localStorage.setItem('shadowMarketProducts', JSON.stringify(products));
+            } catch (e) {
+                alert("Xatolik: Ma'lumotlar hajmi juda katta.");
+            }
         }
 
-        function loginUser() {
-            const name = document.getElementById('login-name').value.trim();
-            const pass = document.getElementById('login-pass').value.trim();
-            let db = getDB();
-            const user = db.users.find(u => u.name.toLowerCase() === name.toLowerCase());
-            if(!user || user.password !== pass) return alert("Ism yoki parol noto'g'ri!");
+        function previewFile() {
+            const preview = document.getElementById('previewImage');
+            const file = document.getElementById('imgUpload').files[0];
+            const reader = new FileReader();
 
-            currentUser = user;
-            localStorage.setItem('last_user_name', name);
-            enterChat();
-        }
+            reader.addEventListener("load", function () {
+                uploadedImageBase64 = reader.result;
+                preview.src = uploadedImageBase64;
+                preview.style.display = 'block';
+            }, false);
 
-        // --- CHAT LOGIC ---
-        function enterChat() {
-            document.getElementById('reg-screen').classList.add('hidden');
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('chat-ui').classList.add('active');
-            document.getElementById('display-id').innerText = currentUser.id;
-            loadChatData();
-        }
-
-        function loadChatData() {
-            const raw = localStorage.getItem(SHARED_KEY);
-            if(!raw) return;
-            chatData = JSON.parse(raw);
-            renderMessages();
-            renderUserList(); // Ro'yxatni yangilash
-        }
-
-        function renderMessages() {
-            const container = document.getElementById('msg-list');
-            container.innerHTML = '';
-
-            chatData.messages.forEach(msg => {
-                let show = false;
-                if(msg.to === null) show = true;
-                else if(msg.to === currentUser.id) show = true;
-                else if(msg.senderID === currentUser.id) show = true;
-
-                if(!show) return;
-
-                const isMine = (msg.senderID === currentUser.id);
-                const div = document.createElement('div');
-                div.className = `msg ${isMine ? 'mine' : 'others'}`;
-
-                let privateTag = '';
-                let senderName = msg.senderName;
-                
-                if(msg.to !== null) {
-                    if(msg.to === currentUser.id) {
-                        privateTag = '<span class="private-tag">Shaxsiy</span>';
-                        senderName = msg.senderName;
-                    } else {
-                        privateTag = `<span class="private-tag">Shaxsiy: ${msg.toName}</span>`;
-                        senderName = "Siz";
-                    }
-                }
-
-                div.innerHTML = `
-                    <span class="msg-info">${senderName} ${privateTag}</span>
-                    ${msg.text}
-                    <div class="msg-time">${msg.time}</div>
-                `;
-                container.appendChild(div);
-            });
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('msg-input');
-            const text = input.value.trim();
-            if(!text) return;
-
-            let toName = null;
-            if(privateTargetID) {
-                const targetUser = chatData.users.find(u => u.id === privateTargetID);
-                if(targetUser) toName = targetUser.name;
-                else {
-                    alert("Foydalanuvchi topilmadi.");
-                    privateTargetID = null;
-                    updateChatMode();
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert("Rasm hajmi 2MB dan oshmasligi kerak!");
+                    document.getElementById('imgUpload').value = ""; 
                     return;
                 }
-            }
-
-            const newMsg = {
-                senderID: currentUser.id,
-                senderName: currentUser.name,
-                to: privateTargetID,
-                toName: toName,
-                text: text,
-                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-            };
-
-            let db = getDB();
-            db.messages.push(newMsg);
-            saveDB(db);
-
-            input.value = '';
-            loadChatData();
-        }
-
-        // --- USER LIST & PRIVATE CHAT ---
-        function toggleDrawer() {
-            document.getElementById('users-drawer').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('open');
-            if(document.getElementById('users-drawer').classList.contains('open')) {
-                renderUserList();
+                reader.readAsDataURL(file);
             }
         }
 
-        function renderUserList() {
-            const container = document.getElementById('users-list-container');
-            container.innerHTML = '';
+        function renderProducts() {
+            const products = getProducts();
+            const grid = document.getElementById('productsGrid');
+            const empty = document.getElementById('emptyState');
+            
+            grid.innerHTML = '';
+            if (products.length === 0) {
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
 
-            // 1. Umumiy chatga qaytish tugmasi
-            const allBtn = document.createElement('div');
-            allBtn.className = 'user-item';
-            allBtn.style.background = (privateTargetID === null) ? 'rgba(0, 242, 96, 0.3)' : 'transparent';
-            allBtn.innerHTML = `<span class="user-info">🌐 Hamma (Umumiy Chat)</span>`;
-            allBtn.onclick = () => selectUser(null);
-            container.appendChild(allBtn);
+            [...products].reverse().forEach(product => {
+                const isOwner = product.authorId === currentUserId;
+                const imgSrc = product.image ? product.image : `https://picsum.photos/seed/${product.id}/400/300`;
 
-            // 2. Foydalanuvchilar ro'yxati
-            chatData.users.forEach(u => {
-                if(u.id === currentUser.id) return; // O'zini ko'rsatmaslik
+                // Izohlarni render qilish
+                let commentsHtml = '';
+                if (product.comments && product.comments.length > 0) {
+                    commentsHtml = product.comments.map(c => `
+                        <div class="comment-item">
+                            <span class="comment-user">${c.user}:</span> 
+                            <span class="comment-text">${c.text}</span>
+                        </div>
+                    `).join('');
+                } else {
+                    commentsHtml = '<p style="color:#666;font-size:0.8rem">Izohlar yo\'q.</p>';
+                }
 
-                const div = document.createElement('div');
-                div.className = 'user-item';
-                // Agar hozir shu odam bilan gaplashayotgan bo'lsak, uni belgilash
-                div.style.background = (privateTargetID === u.id) ? 'rgba(0, 242, 96, 0.3)' : 'transparent';
-                
-                div.innerHTML = `
-                    <span class="user-info">👤 ${u.name}</span>
-                    <span class="user-id-tag">ID: ${u.id}</span>
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="${imgSrc}" class="product-img" onerror="this.src='https://picsum.photos/seed/error/400/300'">
+                    <div class="product-body">
+                        <div class="seller-info">
+                            <span>${product.sellerName}</span>
+                            <span>${product.date}</span>
+                        </div>
+                        <h3 class="product-title">${product.title}</h3>
+                        <p class="product-desc">${product.description}</p>
+                        <div class="product-meta">
+                            <span class="price-tag">${product.price}</span>
+                            <a href="https://t.me/${product.contact.replace('@','')}" target="_blank" style="color:var(--accent-color)">✆ ${product.contact}</a>
+                        </div>
+                        <div class="card-actions">
+                            <button class="action-btn btn-like ${product.likedBy?.includes(currentUserId) ? 'liked' : ''}" onclick="toggleLike('${product.id}')">♥ ${product.likes || 0}</button>
+                            <button class="action-btn" onclick="toggleComments('${product.id}')">💬 ${product.comments?.length || 0}</button>
+                            <button class="action-btn btn-delete" style="display: ${isOwner ? 'flex' : 'none'}" onclick="deleteProduct('${product.id}')">🗑</button>
+                        </div>
+                        <div id="comments-${product.id}" class="comments-section">
+                            <div class="comment-list" id="list-${product.id}">
+                                ${commentsHtml}
+                            </div>
+                            <div class="comment-input-group">
+                                <!-- Bu maydon class="comment-input-field" ga ega, shifr ishlaydi -->
+                                <input type="text" id="input-${product.id}" class="comment-input-field" placeholder="Izohni shifrlab yozing..." autocomplete="off">
+                                <button class="action-btn" onclick="addComment('${product.id}')">OK</button>
+                            </div>
+                        </div>
+                    </div>
                 `;
-                div.onclick = () => selectUser(u.id, u.name);
-                container.appendChild(div);
+                grid.appendChild(card);
             });
         }
 
-        function selectUser(id, name) {
-            privateTargetID = id;
-            updateChatMode();
-            toggleDrawer(); // Drawer'ni yopish
+        function openAddModal() { document.getElementById('addModal').classList.add('active'); }
+        function closeAddModal() { 
+            document.getElementById('addModal').classList.remove('active'); 
+            document.getElementById('productForm').reset();
+            document.getElementById('previewImage').style.display = 'none';
+            uploadedImageBase64 = '';
         }
+        window.onclick = (e) => { if (e.target.id === 'addModal') closeAddModal(); };
 
-        function updateChatMode() {
-            const modeText = document.getElementById('mode-text');
-            const input = document.getElementById('msg-input');
+        document.getElementById('productForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newProduct = {
+                id: Date.now().toString(),
+                image: uploadedImageBase64,
+                title: document.getElementById('prodTitle').value, // Oddiy matn
+                price: document.getElementById('prodPrice').value,
+                description: document.getElementById('prodDesc').value, // Oddiy matn
+                sellerName: document.getElementById('sellerName').value,
+                contact: document.getElementById('sellerContact').value,
+                date: new Date().toLocaleDateString(),
+                authorId: currentUserId,
+                likes: 0, likedBy: [], comments: []
+            };
 
-            if(privateTargetID) {
-                modeText.innerText = `ID: ${privateTargetID}`;
-                modeText.classList.add('private');
-                input.placeholder = "Shaxsiy xabar yozing...";
-            } else {
-                modeText.innerText = "Umumiy Chat";
-                modeText.classList.remove('private');
-                input.placeholder = "Xabar yozing...";
+            const products = getProducts();
+            products.push(newProduct);
+            saveProducts(products);
+            renderProducts();
+            closeAddModal();
+            showToast("E'lon qo'shildi!");
+        });
+
+        function toggleLike(id) {
+            const products = getProducts();
+            const p = products.find(x => x.id === id);
+            if(p) {
+                if(!p.likedBy) p.likedBy = [];
+                const idx = p.likedBy.indexOf(currentUserId);
+                if(idx === -1) { p.likes++; p.likedBy.push(currentUserId); }
+                else { p.likes--; p.likedBy.splice(idx, 1); }
+                saveProducts(products); renderProducts();
             }
         }
 
-        // Enter key listeners
-        document.getElementById('reg-pass').addEventListener('keypress', e => { if(e.key==='Enter') registerUser(); });
-        document.getElementById('login-pass').addEventListener('keypress', e => { if(e.key==='Enter') loginUser(); });
-        document.getElementById('msg-input').addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
+        function toggleComments(id) {
+            document.getElementById(`comments-${id}`).classList.toggle('open');
+        }
 
+        function addComment(id) {
+            const input = document.getElementById(`input-${id}`);
+            if(!input.value.trim()) return;
+            const products = getProducts();
+            const p = products.find(x => x.id === id);
+            if(p) {
+                if(!p.comments) p.comments = [];
+                // Shifr matnini saqlaymiz
+                p.comments.push({user: 'Foydalanuvchi', text: input.value});
+                saveProducts(products); renderProducts();
+                // Qayta ochib qo'yamiz
+                setTimeout(() => document.getElementById(`comments-${id}`).classList.add('open'), 50);
+            }
+        }
+
+        function deleteProduct(id) {
+            if(confirm("O'chirasizmi?")) {
+                const products = getProducts().filter(p => p.id !== id);
+                saveProducts(products); renderProducts();
+            }
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg; t.className = "show";
+            setTimeout(() => t.className = t.className.replace("show", ""), 3000);
+        }
+
+        function clearAllData() {
+            if(confirm("Hammasini o'chirasizmi?")) {
+                localStorage.removeItem('shadowMarketProducts');
+                renderProducts();
+            }
+        }
+
+        renderProducts();
     </script>
 </body>
 </html>
