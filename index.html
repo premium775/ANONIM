@@ -2,38 +2,34 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- --- SEO Meta Teglar --- -->
-    <title>SHADOW MARKET | Shifrlangan Izohlar</title>
-    <meta name="description" content="Shadow Market - faqat izohlar shifrlanadigan maxfiy savdo platformasi.">
-    <meta name="robots" content="index, follow">
+    <title>SHADOW MARKET | Umumiy Sahifa</title>
+    <meta name="description" content="Barcha foydalanuvchilar uchun ochiq bozor.">
     
-    <meta property="og:title" content="SHADOW MARKET">
-    <meta property="og:image" content="https://picsum.photos/seed/shadow/1200/630">
-
     <style>
-        /* --- STILAR --- */
+        /* --- STILAR (Xuddi avvalgidek) --- */
         :root {
             --bg-color: #0d0d0d;
             --card-bg: #1a1a1a;
             --text-main: #e0e0e0;
             --text-muted: #888;
-            --accent-color: #00ff41; 
+            --accent-color: #00ff41;
             --accent-hover: #00cc33;
             --danger-color: #ff3333;
             --border-color: #333;
             --font-family: 'Courier New', Courier, monospace;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: var(--font-family);
-            line-height: 1.6;
-            padding-bottom: 50px;
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden; 
         }
 
         a { text-decoration: none; color: inherit; }
@@ -42,7 +38,7 @@
         header {
             background-color: #000;
             border-bottom: 2px solid var(--accent-color);
-            padding: 15px 20px;
+            padding: 10px 15px;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -50,46 +46,46 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            width: 100%;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: bold;
             color: var(--accent-color);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 5px var(--accent-color);
+            letter-spacing: 1px;
+            white-space: nowrap;
         }
+
+        .nav-actions { display: flex; gap: 5px; }
 
         .nav-actions button {
             background: transparent;
             border: 1px solid var(--accent-color);
             color: var(--accent-color);
-            padding: 8px 15px;
+            padding: 6px 10px;
             cursor: pointer;
             font-family: inherit;
             font-weight: bold;
+            font-size: 0.8rem;
             transition: 0.3s;
-            margin-left: 10px;
+            white-space: nowrap;
         }
 
-        .nav-actions button:hover {
-            background: var(--accent-color);
-            color: #000;
-            box-shadow: 0 0 10px var(--accent-color);
-        }
+        .nav-actions button:hover { background: var(--accent-color); color: #000; }
 
-        /* --- Modal --- */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.95);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             overflow-y: auto;
+            padding: 20px;
         }
 
         .modal.active { display: flex; }
@@ -97,12 +93,12 @@
         .modal-content {
             background-color: var(--card-bg);
             border: 1px solid var(--accent-color);
-            padding: 25px;
-            width: 90%;
+            padding: 20px;
+            width: 100%;
             max-width: 500px;
-            margin: 20px 0;
             box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
             position: relative;
+            margin: auto;
         }
 
         .close-modal {
@@ -113,7 +109,6 @@
             color: var(--danger-color);
         }
 
-        /* --- Rasm Yuklash Stili --- */
         .file-upload-wrapper {
             position: relative;
             margin-bottom: 15px;
@@ -121,124 +116,135 @@
             padding: 20px;
             text-align: center;
             border-radius: 4px;
-            transition: 0.3s;
             cursor: pointer;
         }
 
-        .file-upload-wrapper:hover {
-            border-color: var(--accent-color);
-            background-color: #111;
-        }
-
+        .file-upload-wrapper:hover { border-color: var(--accent-color); background-color: #111; }
         .file-upload-wrapper input[type="file"] {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            opacity: 0;
-            cursor: pointer;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;
         }
+        #previewImage { max-width: 100%; max-height: 200px; margin-top: 10px; display: none; border: 1px solid var(--accent-color); }
 
-        #previewImage {
-            max-width: 100%;
-            max-height: 200px;
-            margin-top: 10px;
-            display: none;
-            border: 1px solid var(--accent-color);
-        }
-
-        /* --- Forma --- */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; color: var(--accent-color); font-size: 0.9rem; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--accent-color); font-size: 0.85rem; }
+        
         .form-group input, .form-group textarea {
             width: 100%; padding: 10px;
             background-color: #000;
             border: 1px solid var(--border-color);
             color: #fff; font-family: inherit;
-        }
-        
-        /* Izoh kiritish qismi maxsus rangda */
-        .comment-input {
-            background-color: #050505 !important;
-            color: var(--accent-color) !important;
-            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 4px;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none; border-color: var(--accent-color);
-        }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent-color); }
 
         .submit-btn {
             width: 100%; padding: 12px;
             background-color: var(--accent-color);
             color: #000; border: none;
             font-weight: bold; cursor: pointer;
-            text-transform: uppercase;
+            text-transform: uppercase; font-size: 0.9rem;
+            border-radius: 4px;
         }
-        .submit-btn:hover { background-color: var(--accent-hover); }
 
-        /* --- Grid va Karta --- */
-        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
-        .feed-header { text-align: center; margin-bottom: 30px; border-bottom: 1px dashed var(--border-color); padding-bottom: 10px; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 10px; }
+
+        .feed-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
 
         .product-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 4px; overflow: hidden;
-            display: flex; flex-direction: column;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
         }
-        .product-card:hover { border-color: var(--accent-color); }
+
+        .product-card:active { transform: scale(0.98); }
 
         .product-img {
-            width: 100%; height: 200px; object-fit: cover;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
             border-bottom: 1px solid var(--border-color);
             background-color: #000;
+            display: block;
         }
 
         .product-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        .seller-info { font-size: 0.8rem; color: var(--accent-color); margin-bottom: 5px; display: flex; justify-content: space-between; }
-        .product-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; color: #fff; }
-        .product-desc { font-size: 0.9rem; color: #ccc; margin-bottom: 15px; flex-grow: 1; }
-        .product-meta { border-top: 1px solid var(--border-color); padding-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
-        .price-tag { font-weight: bold; color: var(--accent-color); }
-
-        .card-actions { display: flex; gap: 10px; margin-top: 10px; }
-        .action-btn { flex: 1; padding: 5px; background: #222; border: 1px solid #444; color: #fff; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .action-btn:hover { background: #333; }
-        .btn-like.liked { color: #ff3333; border-color: #ff3333; }
-        .btn-delete { color: var(--danger-color); border-color: var(--danger-color); display: none; }
-        .btn-delete:hover { background: var(--danger-color); color: #fff; }
-
-        /* Izohlar */
-        .comments-section { background-color: #111; margin-top: 10px; padding: 10px; border-top: 1px solid var(--border-color); display: none; }
-        .comments-section.open { display: block; }
-        .comment-list { margin-bottom: 10px; max-height: 100px; overflow-y: auto; }
-        .comment-item { font-size: 0.75rem; margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 3px; }
-        .comment-user { color: var(--accent-color); font-weight: bold; }
         
-        /* Shifrlangan izoh matni uchun rang */
-        .comment-text {
-            color: #aaa;
-            font-family: monospace;
+        .seller-info {
+            font-size: 0.75rem; color: var(--accent-color); margin-bottom: 5px;
+            display: flex; justify-content: space-between;
         }
         
+        .product-title { font-size: 1rem; font-weight: bold; margin-bottom: 8px; color: #fff; }
+        .product-desc { font-size: 0.85rem; color: #ccc; margin-bottom: 10px; flex-grow: 1; }
+        
+        .product-meta {
+            border-top: 1px solid var(--border-color); padding-top: 8px;
+            display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;
+        }
+        
+        .price-tag { font-weight: bold; color: var(--accent-color); }
+
+        .card-actions { display: flex; gap: 8px; margin-top: 10px; }
+        
+        .action-btn {
+            flex: 1; padding: 8px 2px;
+            background: #222; border: 1px solid #444; color: #fff; cursor: pointer;
+            font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 4px;
+            border-radius: 4px;
+        }
+        
+        .action-btn:active { background: #444; }
+
+        .btn-like.liked { color: #ff3333; border-color: #ff3333; }
+        .btn-delete { color: var(--danger-color); border-color: var(--danger-color); display: none; }
+
+        .comments-section {
+            background-color: #111; margin-top: 10px; padding: 10px;
+            border-top: 1px solid var(--border-color); display: none;
+        }
+        .comments-section.open { display: block; }
+        
+        .comment-list { margin-bottom: 10px; max-height: 100px; overflow-y: auto; font-size: 0.75rem; }
+        .comment-item { margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 3px; }
+        .comment-user { color: var(--accent-color); font-weight: bold; margin-right: 5px; }
+        .comment-text { color: #aaa; }
+
         .comment-input-group { display: flex; gap: 5px; }
-        /* Izoh yozish maydoni */
+        
         .comment-input-field {
-            flex: 1; padding: 5px; font-size: 0.8rem; background: #000; border: 1px solid #333; color: var(--accent-color); font-family: 'Courier New', monospace;
+            flex: 1; padding: 8px; font-size: 0.85rem; background: #000;
+            border: 1px solid #333; color: var(--accent-color);
+            font-family: 'Courier New', monospace; border-radius: 4px;
         }
 
         #toast {
             visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
-            text-align: center; border-radius: 2px; padding: 16px; position: fixed;
-            z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%);
-            border: 1px solid var(--accent-color);
+            text-align: center; border-radius: 4px; padding: 12px; position: fixed;
+            z-index: 2000; left: 50%; bottom: 20px; transform: translateX(-50%);
+            border: 1px solid var(--accent-color); font-size: 0.9rem;
         }
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 20px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 20px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 
-        .empty-state { text-align: center; color: var(--text-muted); margin-top: 50px; }
+        .empty-state { text-align: center; color: var(--text-muted); margin-top: 50px; padding: 20px; }
     </style>
 </head>
 <body>
@@ -246,47 +252,44 @@
     <header>
         <div class="logo">SHADOW<span style="color:#fff">MARKET</span></div>
         <div class="nav-actions">
-            <button onclick="openAddModal()">+ POST QO'SHISH</button>
+            <button onclick="openAddModal()">+ QO'SHISH</button>
             <button onclick="clearAllData()">TOZALASH</button>
         </div>
     </header>
 
     <main class="container">
         <div class="feed-header">
-            <h2>SO'NGGI E'LONLAR</h2>
-            <p style="font-size: 0.8rem; color: #666;">Izohlar shifrlanadi</p>
+            <h2 style="font-size: 1.2rem;">UMUMIY E'LONLAR</h2>
+            <p style="font-size: 0.75rem; color: #666;">Barcha foydalanuvchilarga ko'rinadi</p>
         </div>
 
         <div id="productsGrid" class="products-grid"></div>
         <div id="emptyState" class="empty-state" style="display: none;"><p>Hozircha e'lonlar yo'q.</p></div>
     </main>
 
-    <!-- Modal -->
+    <!-- MODAL -->
     <div id="addModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeAddModal()">&times;</span>
-            <h2 style="color: var(--accent-color); margin-bottom: 20px;">YANGI E'LON</h2>
+            <h2 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1.2rem;">YANGI E'LON</h2>
             <form id="productForm">
                 
-                <!-- RASM -->
                 <div class="file-upload-wrapper">
-                    <p style="color: var(--text-muted);">📁 RASMNI TANLANG</p>
+                    <p style="color: var(--text-muted); font-size: 0.8rem;">📁 Rasmni tanlang</p>
                     <input type="file" id="imgUpload" accept="image/*" onchange="previewFile()">
-                    <img id="previewImage" alt="Oldindan ko'rish">
+                    <img id="previewImage" alt="Preview">
                 </div>
 
-                <!-- NOMI (Oddiy) -->
                 <div class="form-group">
-                    <label>MAHSULOT NOMI</label>
-                    <input type="text" id="prodTitle" placeholder="Nomi..." required>
+                    <label>NOMI</label>
+                    <input type="text" id="prodTitle" placeholder="Mahsulot nomi..." required>
                 </div>
 
                 <div class="form-group">
                     <label>NARX</label>
-                    <input type="text" id="prodPrice" required>
+                    <input type="text" id="prodPrice" placeholder="100 $" required>
                 </div>
 
-                <!-- IZOH (Oddiy) -->
                 <div class="form-group">
                     <label>IZOH</label>
                     <textarea id="prodDesc" rows="3" placeholder="Tavsif..." required></textarea>
@@ -295,16 +298,16 @@
                 <hr style="border-color: #333; margin: 15px 0;">
 
                 <div class="form-group">
-                    <label>SOTUVCHI ISMI / FIRMA</label>
-                    <input type="text" id="sellerName" required>
+                    <label>SOTUVCHI</label>
+                    <input type="text" id="sellerName" placeholder="Ism/Firma" required>
                 </div>
 
                 <div class="form-group">
-                    <label>TELEGRAM USER / NOMER</label>
-                    <input type="text" id="sellerContact" required>
+                    <label>TELEGRAM</label>
+                    <input type="text" id="sellerContact" placeholder="@user" required>
                 </div>
 
-                <button type="submit" class="submit-btn">E'LONNI JONATISH</button>
+                <button type="submit" class="submit-btn">JONATISH</button>
             </form>
         </div>
     </div>
@@ -312,48 +315,40 @@
     <div id="toast">Xabar</div>
 
     <script>
-        // --- O'ZGARUVCHILAR ---
+        // --- ASOSIY MANTIQ ---
+        
+        // Har bir foydalanuvchiga Unikal ID beramiz
         let currentUserId = localStorage.getItem('shadowMarketUserId') || 'user_' + Math.random().toString(36).substr(2, 9);
         localStorage.setItem('shadowMarketUserId', currentUserId);
+        
         let uploadedImageBase64 = '';
 
-        // --- SHIFRLASH JADVALI ---
+        // Shifrlash jadvali (Izohlar uchun)
         const cipherMap = {
-            'S': '1', 's': '1!',
-            'A': '2', 'a': '2!',
-            'L': '3', 'l': '3!',
-            'O': '4', 'o': '4!',
-            'M': '5', 'm': '5!',
-            'I': '6', 'i': '6!',
-            'K': '7', 'k': '7!',
-            'R': '8', 'r': '8!',
-            'T': '9', 't': '9!',
-            ' ': '0'
+            'S': '1', 's': '1!', 'A': '2', 'a': '2!', 'L': '3', 'l': '3!',
+            'O': '4', 'o': '4!', 'M': '5', 'm': '5!', 'I': '6', 'i': '6!',
+            'K': '7', 'k': '7!', 'R': '8', 'r': '8!', 'T': '9', 't': '9!', ' ': '0'
         };
 
-        // --- SHIFRLASH FUNKSIYASI ---
         function encryptText(text) {
-            return text.split('').map(char => {
-                return cipherMap[char] || char;
-            }).join('');
+            return text.split('').map(char => cipherMap[char] || char).join('');
         }
 
-        // --- COMMENT ENCRYPTION EVENT ---
-        // Sahifa yuklanganda izoh maydonlaridagi hodisalarni kuzatamiz
+        // Izoh maydonida shifrlash
         document.addEventListener('input', function(e) {
-            // Faqat class'i 'comment-input-field' bo'lgan inputlarni qidiramiz
             if (e.target.classList.contains('comment-input-field')) {
                 const input = e.target;
-                // Kiritilayotgan matnni shifrlaymiz
                 input.value = encryptText(input.value);
-                // Kursor oxiriga qo'yamiz (matn o'zgargani uchun)
                 input.selectionStart = input.selectionEnd = input.value.length;
             }
         });
 
-        // --- QOLGAN FUNKSIYALAR ---
-
+        // --- MA'LUMOTLAR BILAN ISHLASH (LocalStorage) ---
+        
         function getProducts() {
+            // Bu joyda ma'lumotlar LocalStorage'dan olinadi.
+            // Agar barcha foydalanuvchilar bitta brauzerdan foydalansa, ma'lumotlar umumiy bo'ladi.
+            // Har xil qurilmalarda ma'lumotlarni umumiy qilish uchun Server kerak.
             return JSON.parse(localStorage.getItem('shadowMarketProducts') || '[]');
         }
 
@@ -361,10 +356,11 @@
             try {
                 localStorage.setItem('shadowMarketProducts', JSON.stringify(products));
             } catch (e) {
-                alert("Xatolik: Ma'lumotlar hajmi juda katta.");
+                alert("Xatolik: Xotira to'la.");
             }
         }
 
+        // --- RASM ---
         function previewFile() {
             const preview = document.getElementById('previewImage');
             const file = document.getElementById('imgUpload').files[0];
@@ -386,23 +382,25 @@
             }
         }
 
+        // --- RENDER ---
         function renderProducts() {
             const products = getProducts();
             const grid = document.getElementById('productsGrid');
             const empty = document.getElementById('emptyState');
             
             grid.innerHTML = '';
+            
             if (products.length === 0) {
                 empty.style.display = 'block';
                 return;
             }
             empty.style.display = 'none';
 
+            // Barcha postlarni ko'rsatish (Hech qanday filter yo'q)
             [...products].reverse().forEach(product => {
                 const isOwner = product.authorId === currentUserId;
                 const imgSrc = product.image ? product.image : `https://picsum.photos/seed/${product.id}/400/300`;
 
-                // Izohlarni render qilish
                 let commentsHtml = '';
                 if (product.comments && product.comments.length > 0) {
                     commentsHtml = product.comments.map(c => `
@@ -412,7 +410,7 @@
                         </div>
                     `).join('');
                 } else {
-                    commentsHtml = '<p style="color:#666;font-size:0.8rem">Izohlar yo\'q.</p>';
+                    commentsHtml = '<p style="color:#666;font-size:0.75rem">Izohlar yo\'q.</p>';
                 }
 
                 const card = document.createElement('div');
@@ -428,7 +426,7 @@
                         <p class="product-desc">${product.description}</p>
                         <div class="product-meta">
                             <span class="price-tag">${product.price}</span>
-                            <a href="https://t.me/${product.contact.replace('@','')}" target="_blank" style="color:var(--accent-color)">✆ ${product.contact}</a>
+                            <a href="https://t.me/${product.contact.replace('@','')}" target="_blank" style="color:var(--accent-color); font-weight:bold;">✆ Aloqa</a>
                         </div>
                         <div class="card-actions">
                             <button class="action-btn btn-like ${product.likedBy?.includes(currentUserId) ? 'liked' : ''}" onclick="toggleLike('${product.id}')">♥ ${product.likes || 0}</button>
@@ -436,11 +434,8 @@
                             <button class="action-btn btn-delete" style="display: ${isOwner ? 'flex' : 'none'}" onclick="deleteProduct('${product.id}')">🗑</button>
                         </div>
                         <div id="comments-${product.id}" class="comments-section">
-                            <div class="comment-list" id="list-${product.id}">
-                                ${commentsHtml}
-                            </div>
+                            <div class="comment-list" id="list-${product.id}">${commentsHtml}</div>
                             <div class="comment-input-group">
-                                <!-- Bu maydon class="comment-input-field" ga ega, shifr ishlaydi -->
                                 <input type="text" id="input-${product.id}" class="comment-input-field" placeholder="Izohni shifrlab yozing..." autocomplete="off">
                                 <button class="action-btn" onclick="addComment('${product.id}')">OK</button>
                             </div>
@@ -451,6 +446,7 @@
             });
         }
 
+        // --- MODAL ---
         function openAddModal() { document.getElementById('addModal').classList.add('active'); }
         function closeAddModal() { 
             document.getElementById('addModal').classList.remove('active'); 
@@ -466,9 +462,9 @@
             const newProduct = {
                 id: Date.now().toString(),
                 image: uploadedImageBase64,
-                title: document.getElementById('prodTitle').value, // Oddiy matn
+                title: document.getElementById('prodTitle').value,
                 price: document.getElementById('prodPrice').value,
-                description: document.getElementById('prodDesc').value, // Oddiy matn
+                description: document.getElementById('prodDesc').value,
                 sellerName: document.getElementById('sellerName').value,
                 contact: document.getElementById('sellerContact').value,
                 date: new Date().toLocaleDateString(),
@@ -481,9 +477,10 @@
             saveProducts(products);
             renderProducts();
             closeAddModal();
-            showToast("E'lon qo'shildi!");
+            showToast("E'lon barchaga yuborildi!");
         });
 
+        // --- LIKE & COMMENTS ---
         function toggleLike(id) {
             const products = getProducts();
             const p = products.find(x => x.id === id);
@@ -492,7 +489,8 @@
                 const idx = p.likedBy.indexOf(currentUserId);
                 if(idx === -1) { p.likes++; p.likedBy.push(currentUserId); }
                 else { p.likes--; p.likedBy.splice(idx, 1); }
-                saveProducts(products); renderProducts();
+                saveProducts(products);
+                renderProducts();
             }
         }
 
@@ -507,18 +505,20 @@
             const p = products.find(x => x.id === id);
             if(p) {
                 if(!p.comments) p.comments = [];
-                // Shifr matnini saqlaymiz
                 p.comments.push({user: 'Foydalanuvchi', text: input.value});
-                saveProducts(products); renderProducts();
-                // Qayta ochib qo'yamiz
+                saveProducts(products);
+                renderProducts();
                 setTimeout(() => document.getElementById(`comments-${id}`).classList.add('open'), 50);
             }
         }
 
         function deleteProduct(id) {
             if(confirm("O'chirasizmi?")) {
-                const products = getProducts().filter(p => p.id !== id);
-                saveProducts(products); renderProducts();
+                let products = getProducts();
+                products = products.filter(p => p.id !== id);
+                saveProducts(products);
+                renderProducts();
+                showToast("O'chirildi");
             }
         }
 
@@ -536,6 +536,7 @@
         }
 
         renderProducts();
+
     </script>
 </body>
 </html>
